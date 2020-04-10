@@ -12,7 +12,8 @@ class SidebarManager(private val scoreboard: Scoreboard) {
 
     fun render(lines: MutableMap<Int, String>) {
         for (entry in scoreboard.entries) {
-            scoreboard.resetScores(entry)
+            if (sidebar.getScore(entry).isScoreSet)
+                scoreboard.resetScores(entry)
         }
 
         for (line in lines) {

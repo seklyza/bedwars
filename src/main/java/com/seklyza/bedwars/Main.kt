@@ -1,6 +1,7 @@
 package com.seklyza.bedwars
 
 import com.seklyza.bedwars.commands.GameCommand
+import com.seklyza.bedwars.events.FoodLevelChange
 import com.seklyza.bedwars.game.Game
 import net.minecraft.server.v1_15_R1.PacketPlayOutLogin
 import net.minecraft.server.v1_15_R1.WorldServer
@@ -16,6 +17,7 @@ class Main : JavaPlugin() {
         configVariables = Config()
         game = Game()
         registerCommands()
+        registerEvents()
         logger.info("${description.name} has been enabled.")
     }
 
@@ -43,5 +45,9 @@ class Main : JavaPlugin() {
 
     private fun registerCommands() {
         GameCommand()
+    }
+
+    private fun registerEvents() {
+        FoodLevelChange()
     }
 }

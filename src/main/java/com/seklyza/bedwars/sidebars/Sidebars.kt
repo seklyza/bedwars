@@ -1,10 +1,12 @@
 package com.seklyza.bedwars.sidebars
 
+import com.seklyza.bedwars.game.GamePlayer
+
 fun headerSidebar(size: Int, maxPlayers: Int): LineManager {
     return LineManager
         .builder()
         .newLine()
-        .add("Players: §a${size}/${maxPlayers}")
+        .add("Players: §a$size/$maxPlayers")
         .newLine()
 }
 
@@ -16,12 +18,32 @@ fun waitingSidebar(size: Int, maxPlayers: Int): LineManager {
         .add(footerSidebar())
 }
 
-fun startingSidebar(secondsElapsed: Int, size: Int, maxPlayers: Int): LineManager {
+fun startingSidebar(secondsLeft: Int, size: Int, maxPlayers: Int): LineManager {
     return LineManager
         .builder()
         .add(headerSidebar(size, maxPlayers))
-        .add("Starting in §a$secondsElapsed§r seconds")
+        .add("Starting in §a$secondsLeft§r seconds")
         .add(footerSidebar())
+}
+
+fun ingameSidebar(secondsElapsed: Int, gp: GamePlayer): LineManager {
+    val minutes = secondsElapsed / 60
+    val seconds = secondsElapsed % 60
+
+    val mm = if (minutes < 10) "0${minutes}" else minutes.toString()
+    val ss = if (seconds < 10) "0${seconds}" else seconds.toString()
+
+    val lm = LineManager
+        .builder()
+        .newLine()
+        .add("Time elapsed: §a$mm:$ss")
+        .newLine()
+
+    for ((team) in gp.allTeams) {
+        lm.add("${team.color}§l${team.name.substring(0, 1)} §r${team.name.toLowerCase().capitalize()}: §a✔ ${if (gp.team == team) "§7(YOU)" else ""}")
+    }
+
+    return lm.add(footerSidebar())
 }
 
 fun footerSidebar(): LineManager {
