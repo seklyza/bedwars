@@ -1,0 +1,4 @@
+name: Bedwars
+main: com.seklyza.bedwars.Main
+version: ${project.verison}
+api-version: '1.15'
