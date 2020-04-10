@@ -1,4 +1,7 @@
 name: Bedwars
 main: com.seklyza.bedwars.Main
-version: ${project.verison}
+version: ${project.version}
 api-version: '1.15'
+commands:
+    game:
+        usage: '§cUsage: /<command> [start|stop] [time?]'
