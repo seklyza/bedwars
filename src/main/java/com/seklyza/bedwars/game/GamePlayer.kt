@@ -4,10 +4,12 @@ import com.seklyza.bedwars.Main
 import com.seklyza.bedwars.sidebars.SidebarManager
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin.getPlugin
+import org.bukkit.scoreboard.Team
 
-class GamePlayer(val player: Player, val playerState: PlayerState = PlayerState.WAITING) {
+class GamePlayer(val player: Player, val playerState: PlayerState = PlayerState.WAITING, var team: GameTeam? = null) {
     private val plugin = getPlugin(Main::class.java)
     val sidebarManager: SidebarManager
+    val allTeams = mutableMapOf<GameTeam, Team>()
 
     init {
         player.scoreboard = plugin.server.scoreboardManager.newScoreboard

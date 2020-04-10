@@ -2,3 +2,8 @@ lobby_spawn_point: 0.5 118 0.5
 min_players: 2
 max_players: 16
 start_countdown_timer: 30
+spawn_points:
+    aqua: 0.5 63 -77.5
+    pink: -78.5 63 1.5 -90 0
+    red: 0.5 63 80.5 180 0
+    blue: 79.5 63 1.5 90 0

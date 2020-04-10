@@ -67,6 +67,7 @@ class Game : Listener {
         }
 
         val gp = GamePlayer(player)
+        gp.player.setDisplayName(gp.player.name)
         players[player] = gp
         gp.player.teleport(lobbySpawnPoint)
         gp.player.gameMode = GameMode.ADVENTURE
@@ -83,9 +84,9 @@ class Game : Listener {
     }
 
     private fun onPlayerQuit(player: Player) {
-        val gp = players.remove(player)!!
+        val gp = players.remove(player)
 
-        server.broadcastMessage("§8Quit> §7${gp.player.name}")
+        if (gp != null) server.broadcastMessage("§8Quit> §7${gp.player.name}")
         stopGameMaybe()
     }
 
@@ -130,6 +131,27 @@ class Game : Listener {
     private fun startGame() {
         gameState = GameState.GAME
         server.broadcastMessage("§9Game> §7The game has been started!")
+
+        var i = 0
+        val teams = GameTeam.values().toMutableList()
+        teams.shuffle()
+        for ((_, gp) in players) {
+            for (team in teams) {
+                val sbTeam = gp.player.scoreboard.registerNewTeam(team.toString())
+                sbTeam.color = team.color
+                gp.allTeams[team] = sbTeam
+            }
+            gp.team = teams[i++ % teams.size]
+            gp.player.sendMessage("${gp.team!!.color}§lYou are in ${gp.team!!.name} team!!!")
+            gp.player.setDisplayName("${gp.team!!.color}${gp.player.name}§r")
+            gp.player.teleport(gp.team!!.getSpawnPoint(plugin))
+        }
+
+        for ((_, gp1) in players) {
+            for ((_, gp2) in players) {
+                gp2.allTeams[gp1.team!!]!!.addEntry(gp1.player.name)
+            }
+        }
     }
 
     fun stopGameMaybe(force: Boolean = false) {
