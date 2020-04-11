@@ -8,6 +8,7 @@ import org.bukkit.Difficulty
 import org.bukkit.GameMode
 import org.bukkit.World
 import org.bukkit.WorldCreator
+import org.bukkit.block.Block
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -24,7 +25,9 @@ class Game : Listener {
     val gameWorld: World = server.createWorld(WorldCreator("map"))!!
     private val lobbySpawnPoint = config.getLobbySpawnPoint(gameWorld)
 
+    lateinit var teams: MutableList<GameTeam>
     val players = mutableMapOf<Player, GamePlayer>()
+    val placedBlocks = mutableListOf<Block>()
     private var tasks = mutableListOf<BukkitRunnable>()
     var gameState = GameState.WAITING
 
@@ -136,17 +139,17 @@ class Game : Listener {
         server.broadcastMessage("§9Game> §7The game has been started!")
 
         var i = 0
-        val teams = GameTeam.values().toMutableList()
+        teams = GameTeamType.values().map { GameTeam(it) }.toMutableList()
         teams.shuffle()
         for ((_, gp) in players) {
             for (team in teams) {
-                val sbTeam = gp.player.scoreboard.registerNewTeam(team.toString())
-                sbTeam.color = team.color
-                gp.allTeams[team] = sbTeam
+                val sbTeam = gp.player.scoreboard.registerNewTeam(team.type.toString())
+                sbTeam.color = team.type.color
+                gp.allTeams[team.type] = sbTeam
             }
             gp.team = teams[i++ % teams.size]
-            gp.player.sendMessage("${gp.team!!.color}§lYou are in ${gp.team!!.name} team!!!")
-            gp.player.setDisplayName("${gp.team!!.color}${gp.player.name}§r")
+            gp.player.sendMessage("${gp.team!!.type.color}§lYou are in ${gp.team!!.type.name} team!!!")
+            gp.player.setDisplayName("${gp.team!!.type.color}${gp.player.name}§r")
             gp.player.teleport(gp.team!!.getSpawnPoint(plugin))
             gp.player.gameMode = GameMode.SURVIVAL
             gp.playerState = PlayerState.PLAYER
@@ -156,7 +159,7 @@ class Game : Listener {
 
         for ((_, gp1) in players) {
             for ((_, gp2) in players) {
-                gp2.allTeams[gp1.team!!]!!.addEntry(gp1.player.name)
+                gp2.allTeams[gp1.team!!.type]!!.addEntry(gp1.player.name)
                 val health = gp1.player.scoreboard.getObjective("HP")!!
                 health.getScore(gp1.player.name).score = gp1.player.health.toInt()
                 health.getScore(gp2.player.name).score = gp2.player.health.toInt()

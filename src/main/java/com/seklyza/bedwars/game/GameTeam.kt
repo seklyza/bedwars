@@ -5,14 +5,22 @@ import org.bukkit.ChatColor
 import org.bukkit.Location
 import org.bukkit.plugin.java.JavaPlugin.getPlugin
 
-enum class GameTeam(val color: ChatColor) {
+enum class GameTeamType(val color: ChatColor) {
     AQUA(ChatColor.AQUA),
     PINK(ChatColor.LIGHT_PURPLE),
     RED(ChatColor.RED),
     BLUE(ChatColor.BLUE);
+}
+
+class GameTeam(val type: GameTeamType) {
+    companion object {
+        fun getByType(type: GameTeamType, teams: MutableList<GameTeam>): GameTeam {
+            return teams.find { it.type === type }!!
+        }
+    }
 
     val plugin = getPlugin(Main::class.java)
-    val getSpawnPoint: (Main) -> Location = { it.configVariables.getTeamSpawnPoint(this, it.game.gameWorld) }
+    val getSpawnPoint: (Main) -> Location = { it.configVariables.getTeamSpawnPoint(type, it.game.gameWorld) }
     val players: List<GamePlayer>
         get() {
             return plugin.game.players.filter { it.value.team == this && it.value.playerState == PlayerState.PLAYER }.values.toList()

@@ -1,6 +1,6 @@
 package com.seklyza.bedwars
 
-import com.seklyza.bedwars.game.GameTeam
+import com.seklyza.bedwars.game.GameTeamType
 import com.seklyza.bedwars.utils.parseLocation
 import org.bukkit.Location
 import org.bukkit.World
@@ -25,7 +25,7 @@ class Config {
     val getEmeraldDropPoints = getDropPoints("emerald")
     val lobbyPos1 = config.getString("lobby_pos1")!!.split(" ").joinToString(",")
     val lobbyPos2 = config.getString("lobby_pos2")!!.split(" ").joinToString(",")
-    val getTeamSpawnPoint: (GameTeam, World) -> Location =
+    val getTeamSpawnPoint: (GameTeamType, World) -> Location =
         { gameTeam, world ->
             parseLocation(spawnPoints.getString(gameTeam.toString().toLowerCase())!!)(world)
         }

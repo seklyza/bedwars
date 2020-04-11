@@ -9,7 +9,7 @@ import org.bukkit.scoreboard.Team
 class GamePlayer(val player: Player, var playerState: PlayerState = PlayerState.WAITING, var team: GameTeam? = null) {
     private val plugin = getPlugin(Main::class.java)
     val sidebarManager: SidebarManager
-    val allTeams = mutableMapOf<GameTeam, Team>()
+    val allTeams = mutableMapOf<GameTeamType, Team>()
 
     init {
         player.scoreboard = plugin.server.scoreboardManager.newScoreboard

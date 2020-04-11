@@ -1,6 +1,8 @@
 package com.seklyza.bedwars
 
 import com.seklyza.bedwars.commands.GameCommand
+import com.seklyza.bedwars.events.BlockBreak
+import com.seklyza.bedwars.events.BlockPlace
 import com.seklyza.bedwars.events.FoodLevelChange
 import com.seklyza.bedwars.game.Game
 import net.minecraft.server.v1_15_R1.PacketPlayOutLogin
@@ -49,5 +51,7 @@ class Main : JavaPlugin() {
 
     private fun registerEvents() {
         FoodLevelChange()
+        BlockBreak()
+        BlockPlace()
     }
 }
