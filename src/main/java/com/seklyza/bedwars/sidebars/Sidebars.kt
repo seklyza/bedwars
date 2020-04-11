@@ -28,7 +28,7 @@ fun startingSidebar(secondsLeft: Int, size: Int, maxPlayers: Int): LineManager {
         .add(footerSidebar())
 }
 
-fun ingameSidebar(secondsElapsed: Int, gp: GamePlayer, game: Game): LineManager {
+fun ingameSidebar(secondsElapsed: Int, gp: GamePlayer): LineManager {
     val minutes = secondsElapsed / 60
     val seconds = secondsElapsed % 60
 
@@ -42,13 +42,13 @@ fun ingameSidebar(secondsElapsed: Int, gp: GamePlayer, game: Game): LineManager 
         .newLine()
 
     for ((team) in gp.allTeams) {
-        val gpTeam = GameTeam.getByType(team, game.teams)
+        val currentTeam = GameTeam.getByType(team)
         val prefix = "${team.color}§l${team.name.substring(0, 1)} §r${team.name.toLowerCase().capitalize()}: "
-        if (gpTeam.isBedAlive) {
-            lm.add(prefix + "§a✔ ${if (gpTeam.type == team) "§7YOU" else ""}")
+        if (currentTeam.isBedAlive) {
+            lm.add(prefix + "§a✔ ${if (gp.team!!.type == team) "§7YOU" else ""}")
         } else {
-            if (gpTeam.players.isEmpty()) lm.add("$prefix§c✘")
-            else lm.add(prefix + "§a${gpTeam.players.size} ${if (gpTeam.type == team) "§7YOU" else ""}")
+            if (currentTeam.players.isEmpty()) lm.add("$prefix§c✘")
+            else lm.add(prefix + "§a${currentTeam.players.size} ${if (gp.team!!.type == team) "§7YOU" else ""}")
         }
     }
 

@@ -4,10 +4,7 @@ import com.seklyza.bedwars.Main
 import com.seklyza.bedwars.sidebars.startingSidebar
 import com.seklyza.bedwars.sidebars.waitingSidebar
 import com.seklyza.bedwars.tasks.DropperTask
-import org.bukkit.Difficulty
-import org.bukkit.GameMode
-import org.bukkit.World
-import org.bukkit.WorldCreator
+import org.bukkit.*
 import org.bukkit.block.Block
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -137,6 +134,8 @@ class Game : Listener {
     private fun startGame() {
         gameState = GameState.GAME
         server.broadcastMessage("§9Game> §7The game has been started!")
+        gameWorld.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, true)
+        gameWorld.time = 0
 
         var i = 0
         teams = GameTeamType.values().map { GameTeam(it) }.toMutableList()
@@ -180,7 +179,7 @@ class Game : Listener {
 
     fun stopGameMaybe(force: Boolean = false) {
         if (gameState == GameState.GAME) {
-            if (players.size == 1 || force) {
+            if (players.size <= 1 || force) {
                 announceEnding()
                 server.reload()
             }

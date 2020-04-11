@@ -10,7 +10,7 @@ import org.bukkit.event.block.BlockBreakEvent
 
 class BlockBreak : Event() {
     private fun bedBreakHandler(e: BlockBreakEvent, teamType: GameTeamType) {
-        val team = GameTeam.getByType(teamType, game.teams)
+        val team = GameTeam.getByType(teamType)
         if (game.players[e.player]?.team !== team) {
             team.destroyBed()
             server.broadcastMessage("§9Game> ${team.type.color}${team.type.name.toLowerCase().capitalize()}§7's bed has been§e destroyed§7!")

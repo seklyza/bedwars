@@ -44,7 +44,7 @@ class DropperTask : BukkitRunnable() {
 
     override fun run() {
         for ((_, gp) in game.players) {
-            gp.sidebarManager.render(ingameSidebar(secondsElapsed, gp, game).build())
+            gp.sidebarManager.render(ingameSidebar(secondsElapsed, gp).build())
         }
 
         // Drop iron every two seconds

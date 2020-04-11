@@ -14,7 +14,8 @@ enum class GameTeamType(val color: ChatColor) {
 
 class GameTeam(val type: GameTeamType) {
     companion object {
-        fun getByType(type: GameTeamType, teams: MutableList<GameTeam>): GameTeam {
+        fun getByType(type: GameTeamType): GameTeam {
+            val teams = getPlugin(Main::class.java).game.teams
             return teams.find { it.type === type }!!
         }
     }
