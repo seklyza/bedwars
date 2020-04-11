@@ -1,4 +1,6 @@
 lobby_spawn_point: 0.5 118 0.5
+lobby_pos1: 14 104 -18
+lobby_pos2: -20 134 20
 min_players: 2
 max_players: 16
 start_countdown_timer: 30
