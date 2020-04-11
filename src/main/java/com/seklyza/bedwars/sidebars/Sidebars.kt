@@ -1,7 +1,6 @@
 package com.seklyza.bedwars.sidebars
 
 import com.seklyza.bedwars.game.GamePlayer
-import com.seklyza.bedwars.game.PlayerState
 
 fun headerSidebar(size: Int, maxPlayers: Int): LineManager {
     return LineManager

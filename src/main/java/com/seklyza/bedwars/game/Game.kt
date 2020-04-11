@@ -117,7 +117,7 @@ class Game : Listener {
                 }
 
                 if (secondsLeft % 5 == 0 || secondsLeft < 5)
-                    server.broadcastMessage("§9Game> §7Starting game in $secondsLeft seconds!")
+                    server.broadcastMessage("§9Game> §7Starting game in §e$secondsLeft§7 seconds!")
 
                 val sidebar = startingSidebar(secondsLeft, players.size, config.maxPlayers).build()
                 for ((_, gp) in players) {
