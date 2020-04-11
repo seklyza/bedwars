@@ -3,6 +3,7 @@ package com.seklyza.bedwars.events
 import com.seklyza.bedwars.game.GameState
 import com.seklyza.bedwars.game.GameTeam
 import com.seklyza.bedwars.game.GameTeamType
+import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.event.EventHandler
 import org.bukkit.event.block.BlockBreakEvent
@@ -33,12 +34,11 @@ class BlockBreak : Event() {
             Material.LIGHT_BLUE_BED -> bedBreakHandler(e, GameTeamType.AQUA)
 
             else -> {
-                if (game.gameState == GameState.GAME && !game.placedBlocks.contains(e.block)) {
+                if (game.gameState == GameState.GAME && (!game.placedBlocks.contains(e.block))) {
                     e.player.sendMessage("§cError> §7You can only break player placed blocks!")
-                    game.placedBlocks.remove(e.block)
 
                     e.isCancelled = true
-                }
+                } else game.placedBlocks.remove(e.block)
             }
         }
     }
