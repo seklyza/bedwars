@@ -1,6 +1,8 @@
 package com.seklyza.bedwars.sidebars
 
+import com.seklyza.bedwars.game.Game
 import com.seklyza.bedwars.game.GamePlayer
+import com.seklyza.bedwars.game.PlayerState
 
 fun headerSidebar(size: Int, maxPlayers: Int): LineManager {
     return LineManager
@@ -26,7 +28,7 @@ fun startingSidebar(secondsLeft: Int, size: Int, maxPlayers: Int): LineManager {
         .add(footerSidebar())
 }
 
-fun ingameSidebar(secondsElapsed: Int, gp: GamePlayer): LineManager {
+fun ingameSidebar(secondsElapsed: Int, gp: GamePlayer, game: Game): LineManager {
     val minutes = secondsElapsed / 60
     val seconds = secondsElapsed % 60
 
@@ -40,7 +42,14 @@ fun ingameSidebar(secondsElapsed: Int, gp: GamePlayer): LineManager {
         .newLine()
 
     for ((team) in gp.allTeams) {
-        lm.add("${team.color}§l${team.name.substring(0, 1)} §r${team.name.toLowerCase().capitalize()}: §a✔ ${if (gp.team == team) "§7(YOU)" else ""}")
+        val prefix = "${team.color}§l${team.name.substring(0, 1)} §r${team.name.toLowerCase().capitalize()}: "
+        if (gp.team!!.isBedAlive) {
+            lm.add(prefix + "§a✔ ${if (gp.team == team) "§7(YOU)" else ""}")
+        } else {
+            val size = game.players.count { it.value.team == team && it.value.playerState == PlayerState.PLAYER }
+            if (size == 0) lm.add("$prefix§c✘")
+            else lm.add(prefix + "§a$size ${if (gp.team == team) "§7(YOU)" else ""}")
+        }
     }
 
     return lm.add(footerSidebar())

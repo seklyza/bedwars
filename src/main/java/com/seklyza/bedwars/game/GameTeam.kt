@@ -11,4 +11,10 @@ enum class GameTeam(val color: ChatColor) {
     BLUE(ChatColor.BLUE);
 
     val getSpawnPoint: (Main) -> Location = { it.configVariables.getTeamSpawnPoint(this, it.game.gameWorld) }
+    var isBedAlive: Boolean = true
+        private set
+
+    fun destroyBed() {
+        isBedAlive = false
+    }
 }

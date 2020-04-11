@@ -149,6 +149,7 @@ class Game : Listener {
             gp.player.setDisplayName("${gp.team!!.color}${gp.player.name}§r")
             gp.player.teleport(gp.team!!.getSpawnPoint(plugin))
             gp.player.gameMode = GameMode.SURVIVAL
+            gp.playerState = PlayerState.PLAYER
             val health = gp.player.scoreboard.registerNewObjective("HP", "health", "§c♥")
             health.displaySlot = DisplaySlot.BELOW_NAME
         }
