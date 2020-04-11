@@ -117,7 +117,7 @@ class Game : Listener {
                 }
 
                 if (secondsLeft % 5 == 0 || secondsLeft < 5)
-                    server.broadcastMessage("§9Game> §7Starting game in $secondsLeft seconds!")
+                    server.broadcastMessage("§9Game> §7Starting game in §e$secondsLeft§7 seconds!")
 
                 val sidebar = startingSidebar(secondsLeft, players.size, config.maxPlayers).build()
                 for ((_, gp) in players) {
@@ -165,6 +165,10 @@ class Game : Listener {
 
         gameWorld.pvp = true
         gameWorld.difficulty = Difficulty.NORMAL
+        server.dispatchCommand(server.consoleSender, "/world map")
+        server.dispatchCommand(server.consoleSender, "/pos1 ${config.lobbyPos1}")
+        server.dispatchCommand(server.consoleSender, "/pos2 ${config.lobbyPos2}")
+        server.dispatchCommand(server.consoleSender, "/set 0")
 
         val dropperTask = DropperTask()
         dropperTask.runTaskTimer(plugin, 0, 20)

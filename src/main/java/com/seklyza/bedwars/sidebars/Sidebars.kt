@@ -1,7 +1,6 @@
 package com.seklyza.bedwars.sidebars
 
 import com.seklyza.bedwars.game.GamePlayer
-import com.seklyza.bedwars.game.PlayerState
 
 fun headerSidebar(size: Int, maxPlayers: Int): LineManager {
     return LineManager
@@ -43,10 +42,10 @@ fun ingameSidebar(secondsElapsed: Int, gp: GamePlayer): LineManager {
     for ((team) in gp.allTeams) {
         val prefix = "${team.color}§l${team.name.substring(0, 1)} §r${team.name.toLowerCase().capitalize()}: "
         if (gp.team!!.isBedAlive) {
-            lm.add(prefix + "§a✔ ${if (gp.team == team) "§7(YOU)" else ""}")
+            lm.add(prefix + "§a✔ ${if (gp.team == team) "§7YOU" else ""}")
         } else {
             if (team.players.isEmpty()) lm.add("$prefix§c✘")
-            else lm.add(prefix + "§a${team.players.size} ${if (gp.team == team) "§7(YOU)" else ""}")
+            else lm.add(prefix + "§a${team.players.size} ${if (gp.team == team) "§7YOU" else ""}")
         }
     }
 
