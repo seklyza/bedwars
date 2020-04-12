@@ -64,6 +64,8 @@ class Game : Listener {
         }
 
         for (onlinePlayer in server.onlinePlayers) {
+            player.hidePlayer(plugin, onlinePlayer)
+            onlinePlayer.hidePlayer(plugin, player)
             player.showPlayer(plugin, onlinePlayer)
             onlinePlayer.showPlayer(plugin, player)
         }
