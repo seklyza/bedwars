@@ -2,6 +2,7 @@ package com.seklyza.bedwars.events
 
 import com.destroystokyo.paper.Title
 import com.seklyza.bedwars.game.GameState
+import com.seklyza.bedwars.game.PlayerState
 import org.bukkit.GameMode
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.PlayerDeathEvent
@@ -14,6 +15,7 @@ class PlayerDeath : Event() {
     @EventHandler
     fun onPlayerDeath(e: PlayerDeathEvent) {
         if (game.gameState !== GameState.GAME) return
+        val gp = game.players[e.entity] ?: return
 
         e.isCancelled = true
         e.entity.gameMode = GameMode.ADVENTURE
@@ -30,7 +32,6 @@ class PlayerDeath : Event() {
             onlinePlayer.hidePlayer(plugin, e.entity)
         }
 
-        val gp = game.players[e.entity] ?: return
         var deathMessage = "§9Game> §7${e.deathMessage}"
         deathMessage = deathMessage.replace(gp.player.name, "${gp.team!!.type.color}${gp.player.name}§7")
         val pKiller = gp.player.killer
@@ -46,13 +47,14 @@ class PlayerDeath : Event() {
         server.broadcastMessage(deathMessage)
 
         if (gp.team!!.isBedAlive) {
+            gp.state = PlayerState.RESPAWNING
             object : BukkitRunnable() {
                 private var s = 0
 
                 override fun run() {
                     gp.player.hideTitle()
 
-                    if(s >= 5) {
+                    if (s >= 5) {
                         cancel()
 
                         gp.player.teleport(gp.team!!.getSpawnPoint(plugin))
@@ -60,10 +62,11 @@ class PlayerDeath : Event() {
                             onlinePlayer.showPlayer(plugin, e.entity)
                         }
                         gp.player.activePotionEffects.forEach { gp.player.removePotionEffect(it.type) }
-                        gp.player.gameMode = GameMode.SURVIVAL
                         gp.player.isFlying = false
                         gp.player.allowFlight = false
                         gp.player.canPickupItems = true
+                        gp.player.gameMode = GameMode.SURVIVAL
+                        gp.state = PlayerState.PLAYER
 
                         return
                     }
@@ -75,6 +78,7 @@ class PlayerDeath : Event() {
             }.runTaskTimer(plugin, 0, 20)
         } else {
             gp.player.setDisplayName("§7DEAD §r${gp.player.displayName}")
+            gp.state = PlayerState.SPECTATOR
             game.stopGameMaybe()
         }
     }

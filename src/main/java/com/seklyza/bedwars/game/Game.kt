@@ -82,6 +82,7 @@ class Game : Listener {
         }
         gp.player.isFlying = false
         gp.player.allowFlight = false
+        gp.player.canPickupItems = true
 
         server.broadcastMessage("§8Join> §7${gp.player.name}")
 
@@ -90,7 +91,7 @@ class Game : Listener {
         if (players.size >= config.minPlayers && gameState.canStart) startGameCountdown()
     }
 
-    fun onPlayerQuit(player: Player) {
+    private fun onPlayerQuit(player: Player) {
         val gp = players.remove(player)
 
         if (gp != null) server.broadcastMessage("§8Quit> §7${gp.player.name}")
@@ -148,6 +149,8 @@ class Game : Listener {
             for (team in teams) {
                 val sbTeam = gp.player.scoreboard.registerNewTeam(team.type.toString())
                 sbTeam.color = team.type.color
+                sbTeam.setAllowFriendlyFire(false)
+                sbTeam.setCanSeeFriendlyInvisibles(true)
                 gp.allTeams[team.type] = sbTeam
             }
             gp.team = teams[i++ % teams.size]
@@ -186,6 +189,7 @@ class Game : Listener {
             if (teamsLeft.size <= 1 || force) {
                 announceEnding()
                 if(teamsLeft.size == 1) server.broadcastMessage("§9Game> ${teamsLeft[0].type.color}${teamsLeft[0].type.name.toLowerCase().capitalize()}§7 team has won the game!")
+                gameWorld.pvp = false
 
                 object : BukkitRunnable() {
                     override fun run() {

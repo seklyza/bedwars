@@ -10,6 +10,7 @@ class GamePlayer(val player: Player, var team: GameTeam? = null) {
     private val plugin = getPlugin(Main::class.java)
     val sidebarManager: SidebarManager
     val allTeams = mutableMapOf<GameTeamType, Team>()
+    var state = PlayerState.PLAYER
     var kills = 0
     var finalKills = 0
 
