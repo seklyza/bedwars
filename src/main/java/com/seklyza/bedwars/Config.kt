@@ -23,8 +23,8 @@ class Config {
     val getIronGoldDropPoints = getDropPoints("iron_gold")
     val getDiamondDropPoints = getDropPoints("diamond")
     val getEmeraldDropPoints = getDropPoints("emerald")
-    val lobbyPos1 = config.getString("lobby_pos1")!!.split(" ").joinToString(",")
-    val lobbyPos2 = config.getString("lobby_pos2")!!.split(" ").joinToString(",")
+    val lobbyPos1 = parseLocation(config.getString("lobby_pos1")!!)
+    val lobbyPos2 = parseLocation(config.getString("lobby_pos2")!!)
     val getTeamSpawnPoint: (GameTeamType, World) -> Location =
         { gameTeam, world ->
             parseLocation(spawnPoints.getString(gameTeam.toString().toLowerCase())!!)(world)

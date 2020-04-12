@@ -14,6 +14,8 @@ import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.plugin.java.JavaPlugin.getPlugin
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scoreboard.DisplaySlot
+import kotlin.math.max
+import kotlin.math.min
 
 class Game : Listener {
     private val plugin = getPlugin(Main::class.java)
@@ -173,10 +175,24 @@ class Game : Listener {
 
         gameWorld.pvp = true
         gameWorld.difficulty = Difficulty.NORMAL
-        server.dispatchCommand(server.consoleSender, "/world map")
-        server.dispatchCommand(server.consoleSender, "/pos1 ${config.lobbyPos1}")
-        server.dispatchCommand(server.consoleSender, "/pos2 ${config.lobbyPos2}")
-        server.dispatchCommand(server.consoleSender, "/set 0")
+        val pos1 = config.lobbyPos1(gameWorld)
+        val pos2 = config.lobbyPos2(gameWorld)
+        val minX = min(pos1.x.toInt(), pos2.x.toInt())
+        val minY = min(pos1.y.toInt(), pos2.y.toInt())
+        val minZ = min(pos1.z.toInt(), pos2.z.toInt())
+        val maxX = max(pos1.x.toInt(), pos2.x.toInt())
+        val maxY = max(pos1.y.toInt(), pos2.y.toInt())
+        val maxZ = max(pos1.z.toInt(), pos2.z.toInt())
+
+        for (x in minX..maxX) {
+            for (y in minY..maxY) {
+                for (z in minZ..maxZ) {
+                    val block = gameWorld.getBlockAt(x, y, z)
+
+                    if (block.type != Material.AIR) block.type = Material.AIR
+                }
+            }
+        }
 
         val dropperTask = DropperTask()
         dropperTask.runTaskTimer(plugin, 0, 20)
@@ -188,12 +204,13 @@ class Game : Listener {
             val teamsLeft = teams.filter { it.players.isNotEmpty() }
             if (teamsLeft.size <= 1 || force) {
                 announceEnding()
-                if(teamsLeft.size == 1) server.broadcastMessage("§9Game> ${teamsLeft[0].type.color}${teamsLeft[0].type.name.toLowerCase().capitalize()}§7 team has won the game!")
+                if (teamsLeft.size == 1) server.broadcastMessage("§9Game> ${teamsLeft[0].type.color}${teamsLeft[0].type.name.toLowerCase().capitalize()}§7 team has won the game!")
                 gameWorld.pvp = false
 
                 object : BukkitRunnable() {
                     override fun run() {
-                        server.reload()
+                        server.pluginManager.disablePlugin(plugin)
+                        server.pluginManager.enablePlugin(plugin)
                     }
                 }.runTaskLater(plugin, 20 * 5)
             }
