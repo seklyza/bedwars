@@ -1,6 +1,5 @@
 package com.seklyza.bedwars.sidebars
 
-import com.seklyza.bedwars.game.Game
 import com.seklyza.bedwars.game.GamePlayer
 import com.seklyza.bedwars.game.GameTeam
 
@@ -42,13 +41,20 @@ fun ingameSidebar(secondsElapsed: Int, gp: GamePlayer): LineManager {
         .newLine()
 
     for ((team) in gp.allTeams) {
-        val currentTeam = GameTeam.getByType(team)
         val prefix = "${team.color}§l${team.name.substring(0, 1)} §r${team.name.toLowerCase().capitalize()}: "
-        if (currentTeam.isBedAlive) {
-            lm.add(prefix + "§a✔ ${if (gp.team!!.type == team) "§7YOU" else ""}")
-        } else {
-            if (currentTeam.players.isEmpty()) lm.add("$prefix§c✘")
-            else lm.add(prefix + "§a${currentTeam.players.size} ${if (gp.team!!.type == team) "§7YOU" else ""}")
+        val currentTeam = GameTeam.getByType(team)
+        when {
+            currentTeam.players.isEmpty() -> {
+                lm.add("$prefix§c✘")
+            }
+
+            currentTeam.isBedAlive -> {
+                lm.add(prefix + "§a✔ ${if (gp.team!!.type == team) "§7YOU" else ""}")
+            }
+
+            else -> {
+                lm.add(prefix + "§a${currentTeam.players.size} ${if (gp.team!!.type == team) "§7YOU" else ""}")
+            }
         }
     }
 
