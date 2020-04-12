@@ -53,5 +53,6 @@ class Main : JavaPlugin() {
         BlockPlace()
         PlayerMove()
         PlayerDeath()
+        EntityDamage()
     }
 }

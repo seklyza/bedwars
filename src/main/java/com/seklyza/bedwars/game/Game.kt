@@ -80,6 +80,8 @@ class Game : Listener {
         for (activePotionEffect in gp.player.activePotionEffects) {
             gp.player.removePotionEffect(activePotionEffect.type)
         }
+        gp.player.isFlying = false
+        gp.player.allowFlight = false
 
         server.broadcastMessage("§8Join> §7${gp.player.name}")
 
@@ -88,7 +90,7 @@ class Game : Listener {
         if (players.size >= config.minPlayers && gameState.canStart) startGameCountdown()
     }
 
-    private fun onPlayerQuit(player: Player) {
+    fun onPlayerQuit(player: Player) {
         val gp = players.remove(player)
 
         if (gp != null) server.broadcastMessage("§8Quit> §7${gp.player.name}")
@@ -153,7 +155,6 @@ class Game : Listener {
             gp.player.setDisplayName("${gp.team!!.type.color}${gp.player.name}§r")
             gp.player.teleport(gp.team!!.getSpawnPoint(plugin))
             gp.player.gameMode = GameMode.SURVIVAL
-            gp.playerState = PlayerState.PLAYER
             val health = gp.player.scoreboard.registerNewObjective("HP", "health", "§c♥")
             health.displaySlot = DisplaySlot.BELOW_NAME
         }
@@ -181,9 +182,16 @@ class Game : Listener {
 
     fun stopGameMaybe(force: Boolean = false) {
         if (gameState == GameState.GAME) {
-            if (players.size <= 1 || force) {
+            val teamsLeft = teams.filter { it.players.isNotEmpty() }
+            if (teamsLeft.size <= 1 || force) {
                 announceEnding()
-                server.reload()
+                if(teamsLeft.size == 1) server.broadcastMessage("§9Game> ${teamsLeft[0].type.color}${teamsLeft[0].type.name.toLowerCase().capitalize()}§7 team has won the game!")
+
+                object : BukkitRunnable() {
+                    override fun run() {
+                        server.reload()
+                    }
+                }.runTaskLater(plugin, 20 * 5)
             }
         } else if (gameState == GameState.STARTING && (players.size < config.minPlayers || force)) {
             for (task in tasks) {

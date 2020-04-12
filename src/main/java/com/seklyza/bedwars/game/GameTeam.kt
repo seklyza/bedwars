@@ -2,6 +2,7 @@ package com.seklyza.bedwars.game
 
 import com.seklyza.bedwars.Main
 import org.bukkit.ChatColor
+import org.bukkit.GameMode
 import org.bukkit.Location
 import org.bukkit.plugin.java.JavaPlugin.getPlugin
 
@@ -24,7 +25,7 @@ class GameTeam(val type: GameTeamType) {
     val getSpawnPoint: (Main) -> Location = { it.configVariables.getTeamSpawnPoint(type, it.game.gameWorld) }
     val players: List<GamePlayer>
         get() {
-            return plugin.game.players.filter { it.value.team == this && it.value.playerState == PlayerState.PLAYER }.values.toList()
+            return plugin.game.players.filter { it.value.team == this && it.value.player.gameMode == GameMode.SURVIVAL }.values.toList()
         }
 
     var isBedAlive: Boolean = true

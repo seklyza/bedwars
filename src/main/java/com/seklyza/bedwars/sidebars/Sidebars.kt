@@ -52,7 +52,11 @@ fun ingameSidebar(secondsElapsed: Int, gp: GamePlayer): LineManager {
         }
     }
 
-    return lm.add(footerSidebar())
+    return lm
+        .newLine()
+        .add("Kills: §a${gp.kills}")
+        .add("Final kills: §a${gp.finalKills}")
+        .add(footerSidebar())
 }
 
 fun footerSidebar(): LineManager {
