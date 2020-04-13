@@ -54,5 +54,6 @@ class Main : JavaPlugin() {
         PlayerMove()
         PlayerDeath()
         EntityDamage()
+        PlayerInteract()
     }
 }
