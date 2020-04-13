@@ -65,6 +65,7 @@ class Game : Listener {
             return
         }
 
+        player.enderChest.clear()
         for (onlinePlayer in server.onlinePlayers) {
             player.hidePlayer(plugin, onlinePlayer)
             onlinePlayer.hidePlayer(plugin, player)
@@ -141,7 +142,6 @@ class Game : Listener {
     private fun startGame() {
         gameState = GameState.GAME
         server.broadcastMessage("§9Game> §7The game has been started!")
-        gameWorld.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, true)
         gameWorld.time = 0
 
         var i = 0
@@ -206,6 +206,17 @@ class Game : Listener {
                 announceEnding()
                 if (teamsLeft.size == 1) server.broadcastMessage("§9Game> ${teamsLeft[0].type.color}${teamsLeft[0].type.name.toLowerCase().capitalize()}§7 team has won the game!")
                 gameWorld.pvp = false
+
+                server.onlinePlayers.forEach {
+                    it.gameMode = GameMode.ADVENTURE
+                    it.inventory.clear()
+                    players[it]?.state = PlayerState.SPECTATOR
+                }
+
+                for (task in tasks) {
+                    if (!task.isCancelled) task.cancel()
+                }
+                tasks = mutableListOf()
 
                 object : BukkitRunnable() {
                     override fun run() {

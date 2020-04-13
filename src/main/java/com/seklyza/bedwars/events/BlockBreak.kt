@@ -3,7 +3,6 @@ package com.seklyza.bedwars.events
 import com.seklyza.bedwars.game.GameState
 import com.seklyza.bedwars.game.GameTeam
 import com.seklyza.bedwars.game.GameTeamType
-import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.event.EventHandler
 import org.bukkit.event.block.BlockBreakEvent
@@ -11,12 +10,20 @@ import org.bukkit.event.block.BlockBreakEvent
 class BlockBreak : Event() {
     private fun bedBreakHandler(e: BlockBreakEvent, teamType: GameTeamType) {
         val team = GameTeam.getByType(teamType)
-        if (game.players[e.player]?.team !== team) {
-            team.destroyBed()
-            server.broadcastMessage("§9Game> ${team.type.color}${team.type.name.toLowerCase().capitalize()}§7's bed has been§e destroyed§7!")
-        } else {
-            e.player.sendMessage("§cError> §7You can't break your own bed!")
-            e.isCancelled = true
+        when {
+            team.players.isEmpty() -> {
+                e.isCancelled = true
+            }
+
+            game.players[e.player]?.team !== team -> {
+                team.destroyBed()
+                server.broadcastMessage("§9Game> ${team.type.color}${team.type.name.toLowerCase().capitalize()}§7's bed has been§e destroyed§7!")
+            }
+
+            else -> {
+                e.player.sendMessage("§cError> §7You can't break your own bed!")
+                e.isCancelled = true
+            }
         }
         e.isDropItems = false
     }
