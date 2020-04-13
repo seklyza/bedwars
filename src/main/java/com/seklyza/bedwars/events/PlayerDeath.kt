@@ -57,7 +57,6 @@ class PlayerDeath : Event() {
                     if (s >= 5) {
                         cancel()
 
-                        gp.player.teleport(gp.team!!.getSpawnPoint(plugin))
                         for (onlinePlayer in server.onlinePlayers) {
                             onlinePlayer.showPlayer(plugin, e.entity)
                         }
@@ -66,7 +65,14 @@ class PlayerDeath : Event() {
                         gp.player.allowFlight = false
                         gp.player.canPickupItems = true
                         gp.player.gameMode = GameMode.SURVIVAL
-                        gp.state = PlayerState.PLAYER
+                        gp.player.teleport(gp.team!!.getSpawnPoint(plugin))
+
+                        // We set the player to be a player again only 0.5 seconds afterwards because then the player could take fall damage (see EntityDamage#onEntityDamage(EntityDamageEvent))
+                        object : BukkitRunnable() {
+                            override fun run() {
+                                gp.state = PlayerState.PLAYER
+                            }
+                        }.runTaskLater(plugin, 10)
 
                         return
                     }
