@@ -14,11 +14,18 @@ class Main : JavaPlugin() {
     lateinit var configVariables: Config
 
     override fun onEnable() {
+        logger.info("${description.name} is enabling.")
         configVariables = Config()
         game = Game()
         registerCommands()
         registerEvents()
-        logger.info("${description.name} has been enabled.")
+        logger.info("\n" +
+            "██████╗░███████╗██████╗░░██╗░░░░░░░██╗░█████╗░██████╗░░██████╗\n" +
+            "██╔══██╗██╔════╝██╔══██╗░██║░░██╗░░██║██╔══██╗██╔══██╗██╔════╝\n" +
+            "██████╦╝█████╗░░██║░░██║░╚██╗████╗██╔╝███████║██████╔╝╚█████╗░\n" +
+            "██╔══██╗██╔══╝░░██║░░██║░░████╔═████║░██╔══██║██╔══██╗░╚═══██╗\n" +
+            "██████╦╝███████╗██████╔╝░░╚██╔╝░╚██╔╝░██║░░██║██║░░██║██████╔╝\n" +
+            "╚═════╝░╚══════╝╚═════╝░░░░╚═╝░░░╚═╝░░╚═╝░░╚═╝╚═╝░░╚═╝╚═════╝░")
     }
 
     override fun onDisable() {

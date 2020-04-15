@@ -1,6 +1,7 @@
 package com.seklyza.bedwars.game
 
 import com.seklyza.bedwars.Main
+import com.seklyza.bedwars.npcs.VillagerItemShopNPC
 import com.seklyza.bedwars.sidebars.startingSidebar
 import com.seklyza.bedwars.sidebars.waitingSidebar
 import com.seklyza.bedwars.tasks.DropperTask
@@ -86,6 +87,7 @@ class Game : Listener {
         gp.player.isFlying = false
         gp.player.allowFlight = false
         gp.player.canPickupItems = true
+        gp.player.totalExperience = 0
 
         server.broadcastMessage("§8Join> §7${gp.player.name}")
 
@@ -124,8 +126,12 @@ class Game : Listener {
                     return
                 }
 
-                if (secondsLeft % 5 == 0 || secondsLeft < 5)
+                if (secondsLeft % 5 == 0 || secondsLeft < 5) {
                     server.broadcastMessage("§9Game> §7Starting game in §e$secondsLeft§7 seconds!")
+                    for ((p) in players) {
+                        p.playSound(p.location, Sound.BLOCK_NOTE_BLOCK_PLING, 3.toFloat(), 1.toFloat())
+                    }
+                }
 
                 val sidebar = startingSidebar(secondsLeft, players.size, config.maxPlayers).build()
                 for ((_, gp) in players) {
@@ -197,6 +203,12 @@ class Game : Listener {
         val dropperTask = DropperTask()
         dropperTask.runTaskTimer(plugin, 0, 20)
         tasks.add(dropperTask)
+
+        spawnNPCs()
+    }
+
+    private fun spawnNPCs() {
+        config.getItemShops(gameWorld).map { VillagerItemShopNPC(it) }
     }
 
     fun stopGameMaybe(force: Boolean = false) {

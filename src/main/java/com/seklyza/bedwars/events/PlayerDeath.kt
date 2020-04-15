@@ -14,10 +14,10 @@ class PlayerDeath : Event() {
     @Suppress("unused")
     @EventHandler
     fun onPlayerDeath(e: PlayerDeathEvent) {
+        e.isCancelled = true
         if (game.gameState !== GameState.GAME) return
         val gp = game.players[e.entity] ?: return
 
-        e.isCancelled = true
         e.entity.gameMode = GameMode.ADVENTURE
         e.entity.allowFlight = true
         e.entity.isFlying = true

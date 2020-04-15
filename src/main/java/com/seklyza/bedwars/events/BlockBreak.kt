@@ -4,6 +4,7 @@ import com.seklyza.bedwars.game.GameState
 import com.seklyza.bedwars.game.GameTeam
 import com.seklyza.bedwars.game.GameTeamType
 import org.bukkit.Material
+import org.bukkit.Sound
 import org.bukkit.event.EventHandler
 import org.bukkit.event.block.BlockBreakEvent
 
@@ -18,6 +19,9 @@ class BlockBreak : Event() {
             game.players[e.player]?.team !== team -> {
                 team.destroyBed()
                 server.broadcastMessage("§9Game> ${team.type.color}${team.type.name.toLowerCase().capitalize()}§7's bed has been§e destroyed§7!")
+                for (gp in team.players) {
+                    gp.player.playSound(gp.player.location, Sound.ENTITY_WITHER_DEATH, 3.toFloat(), 1.toFloat())
+                }
             }
 
             else -> {

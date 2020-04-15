@@ -29,6 +29,7 @@ class Config {
         { gameTeam, world ->
             parseLocation(spawnPoints.getString(gameTeam.toString().toLowerCase())!!)(world)
         }
+    val getItemShops: (World) -> List<Location> = { world -> config.getStringList("item_shops").map { parseLocation(it)(world) } }
     val minPlayers = config.getInt("min_players")
     val maxPlayers = config.getInt("max_players")
     val startCountdownTimer = config.getInt("start_countdown_timer")

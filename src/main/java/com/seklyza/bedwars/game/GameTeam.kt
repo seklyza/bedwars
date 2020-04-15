@@ -3,13 +3,14 @@ package com.seklyza.bedwars.game
 import com.seklyza.bedwars.Main
 import org.bukkit.ChatColor
 import org.bukkit.Location
+import org.bukkit.Material
 import org.bukkit.plugin.java.JavaPlugin.getPlugin
 
-enum class GameTeamType(val color: ChatColor) {
-    AQUA(ChatColor.AQUA),
-    PINK(ChatColor.LIGHT_PURPLE),
-    RED(ChatColor.RED),
-    BLUE(ChatColor.BLUE);
+enum class GameTeamType(val color: ChatColor, val wool: Material) {
+    AQUA(ChatColor.AQUA, Material.LIGHT_BLUE_WOOL),
+    PINK(ChatColor.LIGHT_PURPLE, Material.PINK_WOOL),
+    RED(ChatColor.RED, Material.RED_WOOL),
+    BLUE(ChatColor.BLUE, Material.BLUE_WOOL);
 }
 
 class GameTeam(val type: GameTeamType) {
