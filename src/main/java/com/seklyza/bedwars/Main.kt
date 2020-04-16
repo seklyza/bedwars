@@ -63,5 +63,7 @@ class Main : JavaPlugin() {
         EntityDamage()
         PlayerInteract()
         EntityExplode()
+        PlayerDropItem()
+        PlayerAttemptPickupItem()
     }
 }

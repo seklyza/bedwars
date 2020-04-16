@@ -20,7 +20,7 @@ class BlockPlace : Event() {
     @EventHandler
     fun onBlockPlace(e: BlockPlaceEvent) {
         if (e.block.type == Material.TNT) {
-            e.isCancelled = true
+            e.block.type = Material.AIR
             e.block.world.spawnEntity(e.block.location.add(0.5, 0.0, 0.5), EntityType.PRIMED_TNT)
             return
         }

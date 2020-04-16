@@ -12,6 +12,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
+import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin.getPlugin
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scoreboard.DisplaySlot
@@ -167,6 +168,7 @@ class Game : Listener {
             gp.player.setDisplayName("${gp.team!!.type.color}${gp.player.name}§r")
             gp.player.teleport(gp.team!!.getSpawnPoint(plugin))
             gp.player.gameMode = GameMode.SURVIVAL
+            gp.player.inventory.setItem(0, ItemStack(Material.WOODEN_SWORD))
             val health = gp.player.scoreboard.registerNewObjective("HP", "health", "§c♥")
             health.displaySlot = DisplaySlot.BELOW_NAME
         }

@@ -4,8 +4,10 @@ import com.destroystokyo.paper.Title
 import com.seklyza.bedwars.game.GameState
 import com.seklyza.bedwars.game.PlayerState
 import org.bukkit.GameMode
+import org.bukkit.Material
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.PlayerDeathEvent
+import org.bukkit.inventory.ItemStack
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitRunnable
@@ -66,6 +68,7 @@ class PlayerDeath : Event() {
                         gp.player.canPickupItems = true
                         gp.player.gameMode = GameMode.SURVIVAL
                         gp.player.teleport(gp.team!!.getSpawnPoint(plugin))
+                        gp.player.inventory.setItem(0, ItemStack(Material.WOODEN_SWORD))
 
                         // We set the player to be a player again only 0.5 seconds afterwards because then the player could take fall damage (see EntityDamage#onEntityDamage(EntityDamageEvent))
                         object : BukkitRunnable() {
