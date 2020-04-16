@@ -87,7 +87,8 @@ class Game : Listener {
         gp.player.isFlying = false
         gp.player.allowFlight = false
         gp.player.canPickupItems = true
-        gp.player.totalExperience = 0
+        gp.player.exp = 0.toFloat()
+        gp.player.level = 0
 
         server.broadcastMessage("§8Join> §7${gp.player.name}")
 
