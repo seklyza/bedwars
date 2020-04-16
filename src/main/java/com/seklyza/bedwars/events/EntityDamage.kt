@@ -1,6 +1,7 @@
 package com.seklyza.bedwars.events
 
 import com.seklyza.bedwars.game.PlayerState
+import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageByEntityEvent
@@ -10,6 +11,7 @@ class EntityDamage : Event() {
     @Suppress("unused")
     @EventHandler
     fun onEntityDamage(e: EntityDamageByEntityEvent) {
+        if(e.damager.type == EntityType.PRIMED_TNT) e.isCancelled = true
         if (e.damager !is Player) return
 
         if (game.players[e.damager as Player]?.state != PlayerState.PLAYER) e.isCancelled = true

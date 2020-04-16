@@ -62,5 +62,6 @@ class Main : JavaPlugin() {
         PlayerDeath()
         EntityDamage()
         PlayerInteract()
+        EntityExplode()
     }
 }
