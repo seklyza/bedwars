@@ -1,6 +1,7 @@
 package com.seklyza.bedwars.tasks
 
 import com.seklyza.bedwars.Main
+import com.seklyza.bedwars.game.PlayerState
 import com.seklyza.bedwars.sidebars.ingameSidebar
 import org.bukkit.Location
 import org.bukkit.Material
@@ -45,6 +46,17 @@ class DropperTask : BukkitRunnable() {
     override fun run() {
         for ((_, gp) in game.players) {
             gp.sidebarManager.render(ingameSidebar(secondsElapsed, gp).build())
+
+            if (gp.state == PlayerState.PLAYER) {
+                if (gp.player.inventory.contains(Material.STONE_SWORD) ||
+                    gp.player.inventory.contains(Material.IRON_SWORD) ||
+                    gp.player.inventory.contains(Material.GOLDEN_SWORD) ||
+                    gp.player.inventory.contains(Material.DIAMOND_SWORD)) {
+                    gp.player.inventory.remove(Material.WOODEN_SWORD)
+                } else if (!gp.player.inventory.contains(Material.WOODEN_SWORD)) {
+                    gp.player.inventory.addItem(ItemStack(Material.WOODEN_SWORD))
+                }
+            }
         }
 
         // Drop iron every two seconds

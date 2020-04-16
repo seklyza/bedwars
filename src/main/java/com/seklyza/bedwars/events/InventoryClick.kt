@@ -1,0 +1,13 @@
+package com.seklyza.bedwars.events
+
+import org.bukkit.Material
+import org.bukkit.event.EventHandler
+import org.bukkit.event.inventory.InventoryClickEvent
+
+class InventoryClick : Event() {
+    @Suppress("unused")
+    @EventHandler
+    fun onPlayerDropItem(e: InventoryClickEvent) {
+        if (e.currentItem?.type == Material.WOODEN_SWORD) e.isCancelled = true
+    }
+}

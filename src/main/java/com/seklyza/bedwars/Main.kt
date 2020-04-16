@@ -64,6 +64,6 @@ class Main : JavaPlugin() {
         PlayerInteract()
         EntityExplode()
         PlayerDropItem()
-        PlayerAttemptPickupItem()
+        InventoryClick()
     }
 }

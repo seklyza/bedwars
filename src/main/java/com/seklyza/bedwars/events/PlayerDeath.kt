@@ -68,7 +68,6 @@ class PlayerDeath : Event() {
                         gp.player.canPickupItems = true
                         gp.player.gameMode = GameMode.SURVIVAL
                         gp.player.teleport(gp.team!!.getSpawnPoint(plugin))
-                        gp.player.inventory.setItem(0, ItemStack(Material.WOODEN_SWORD))
 
                         // We set the player to be a player again only 0.5 seconds afterwards because then the player could take fall damage (see EntityDamage#onEntityDamage(EntityDamageEvent))
                         object : BukkitRunnable() {
