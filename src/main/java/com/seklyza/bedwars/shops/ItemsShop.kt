@@ -6,6 +6,8 @@ import org.bukkit.Sound
 class ItemsShop(gp: GamePlayer) : Shop(gp, "Item Shop", 54) {
     init {
         addItem(Item(createItem(gp.team!!.type.wool, null, 16), Currency.IRON, 4), 20)
+        addItem(Item(createItem(Material.IRON_SWORD, null, 1), Currency.GOLD, 7), 22)
+        addItem(Item(createItem(Material.END_STONE, null, 12), Currency.IRON, 24), 29)
     }
 
     override fun handle(item: Item) {
