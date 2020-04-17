@@ -1,5 +1,6 @@
 package com.seklyza.bedwars.events
 
+import com.destroystokyo.paper.Title
 import com.seklyza.bedwars.game.GameState
 import com.seklyza.bedwars.game.GameTeam
 import com.seklyza.bedwars.game.GameTeamType
@@ -21,6 +22,7 @@ class BlockBreak : Event() {
                 server.broadcastMessage("§9Game> ${team.type.color}${team.type.name.toLowerCase().capitalize()}§7's bed has been§e destroyed§7!")
                 for (gp in team.players) {
                     gp.player.playSound(gp.player.location, Sound.ENTITY_WITHER_DEATH, 3.toFloat(), 1.toFloat())
+                    gp.player.sendTitle(Title.builder().title("§c§lBED DESTROYED!").subtitle("§eYou will no longer respawn!").fadeOut(20).build())
                 }
             }
 

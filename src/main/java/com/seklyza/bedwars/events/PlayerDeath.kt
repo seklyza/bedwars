@@ -3,8 +3,11 @@ package com.seklyza.bedwars.events
 import com.destroystokyo.paper.Title
 import com.seklyza.bedwars.game.GameState
 import com.seklyza.bedwars.game.PlayerState
+import com.seklyza.bedwars.shops.Currency
 import org.bukkit.GameMode
 import org.bukkit.Material
+import org.bukkit.Sound
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.inventory.ItemStack
@@ -23,9 +26,7 @@ class PlayerDeath : Event() {
         e.entity.gameMode = GameMode.ADVENTURE
         e.entity.allowFlight = true
         e.entity.isFlying = true
-        for (item in e.entity.inventory.contents) {
-            if (item != null) game.gameWorld.dropItemNaturally(e.entity.location, item)
-        }
+        val resources = countResources(e.entity)
         e.entity.inventory.clear()
         e.entity.canPickupItems = false
         e.entity.addPotionEffect(PotionEffect(PotionEffectType.INVISIBILITY, 99999, 255, false, false))
@@ -38,15 +39,20 @@ class PlayerDeath : Event() {
         deathMessage = deathMessage.replace(gp.player.name, "${gp.team!!.type.color}${gp.player.name}§7")
         val pKiller = gp.player.killer
         if (pKiller != null) {
+            pKiller.playSound(pKiller.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 3.toFloat(), 1.toFloat())
+
             val killer = game.players[pKiller]!!
             deathMessage = deathMessage.replace(killer.player.name, "${killer.team!!.type.color}${killer.player.name}§7")
+            server.broadcastMessage(deathMessage)
+            for ((currency, amount) in resources) {
+                pKiller.sendMessage("+$amount ${currency.displayName}")
+                pKiller.inventory.addItem(ItemStack(currency.material, amount))
+            }
             if (gp.team!!.isBedAlive) killer.kills++ else {
                 killer.finalKills++
                 deathMessage += " §b§lFINAL KILL!"
             }
-        }
-
-        server.broadcastMessage(deathMessage)
+        } else server.broadcastMessage(deathMessage)
 
         if (gp.team!!.isBedAlive) {
             gp.state = PlayerState.RESPAWNING
@@ -89,5 +95,26 @@ class PlayerDeath : Event() {
             gp.state = PlayerState.SPECTATOR
             game.stopGameMaybe()
         }
+    }
+
+    private fun countResources(player: Player): Map<Currency, Int> {
+        val currencies = mutableMapOf<Material, Currency>()
+        val resources = mutableMapOf<Currency, Int>()
+        for (currency in Currency.values()) {
+            currencies[currency.material] = currency
+        }
+        for (itemStack in player.inventory.contents) {
+            if (itemStack == null) continue
+
+            if (currencies[itemStack.type] != null) {
+                if (resources[currencies[itemStack.type]!!] == null) {
+                    resources[currencies[itemStack.type]!!] = 0
+                }
+
+                resources[currencies[itemStack.type]!!] = resources[currencies[itemStack.type]!!]!!.plus(itemStack.amount)
+            }
+        }
+
+        return resources
     }
 }
