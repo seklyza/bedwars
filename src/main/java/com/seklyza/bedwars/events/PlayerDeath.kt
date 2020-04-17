@@ -45,7 +45,7 @@ class PlayerDeath : Event() {
             deathMessage = deathMessage.replace(killer.player.name, "${killer.team!!.type.color}${killer.player.name}§7")
             server.broadcastMessage(deathMessage)
             for ((currency, amount) in resources) {
-                pKiller.sendMessage("+$amount ${currency.displayName}")
+                pKiller.sendMessage("${currency.color}+$amount ${currency.displayName}")
                 pKiller.inventory.addItem(ItemStack(currency.material, amount))
             }
             if (gp.team!!.isBedAlive) killer.kills++ else {
@@ -74,6 +74,7 @@ class PlayerDeath : Event() {
                         gp.player.canPickupItems = true
                         gp.player.gameMode = GameMode.SURVIVAL
                         gp.player.teleport(gp.team!!.getSpawnPoint(plugin))
+                        gp.player.sendTitle(Title.builder().fadeIn(0).title("§a§lYOU RESPAWNED!").fadeOut(5).build())
 
                         // We set the player to be a player again only 0.5 seconds afterwards because then the player could take fall damage (see EntityDamage#onEntityDamage(EntityDamageEvent))
                         object : BukkitRunnable() {

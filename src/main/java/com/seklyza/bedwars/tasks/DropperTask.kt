@@ -68,8 +68,8 @@ class DropperTask : BukkitRunnable() {
         // Drop diamond every thirty seconds
         dropItem(30, diamondDropPoints, Material.DIAMOND)
 
-        // Drop emerald every a minute and a half
-        dropItem(90, emeraldDropPoints, Material.EMERALD)
+        // Drop emerald every forty-five seconds
+        dropItem(45, emeraldDropPoints, Material.EMERALD)
 
         secondsElapsed++
     }
