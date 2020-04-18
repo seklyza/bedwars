@@ -1,7 +1,7 @@
 package com.seklyza.bedwars.game
 
 import com.seklyza.bedwars.Main
-import com.seklyza.bedwars.npcs.VillagerItemShopNPC
+import com.seklyza.bedwars.npcs.ItemsShopVillagerNPC
 import com.seklyza.bedwars.sidebars.startingSidebar
 import com.seklyza.bedwars.sidebars.waitingSidebar
 import com.seklyza.bedwars.tasks.DropperTask
@@ -28,6 +28,7 @@ class Game : Listener {
     private val lobbySpawnPoint = config.getLobbySpawnPoint(gameWorld)
 
     lateinit var teams: MutableList<GameTeam>
+    private val itemShopNPCs: List<ItemsShopVillagerNPC>
     val players = mutableMapOf<Player, GamePlayer>()
     val placedBlocks = mutableListOf<Block>()
     private var tasks = mutableListOf<BukkitRunnable>()
@@ -46,6 +47,8 @@ class Game : Listener {
         }.runTaskLater(plugin, 10)
 
         server.pluginManager.registerEvents(this, plugin)
+
+        itemShopNPCs = config.getItemShops(gameWorld).map { ItemsShopVillagerNPC(it) }
     }
 
     @Suppress("unused")
@@ -207,11 +210,7 @@ class Game : Listener {
         dropperTask.runTaskTimer(plugin, 0, 20)
         tasks.add(dropperTask)
 
-        spawnNPCs()
-    }
-
-    private fun spawnNPCs() {
-        config.getItemShops(gameWorld).map { VillagerItemShopNPC(it) }
+        server.onlinePlayers.forEach { p -> itemShopNPCs.map { it.sendPacket(p) } }
     }
 
     fun stopGameMaybe(force: Boolean = false) {
@@ -232,6 +231,8 @@ class Game : Listener {
                     players[it]?.player?.addPotionEffect(PotionEffect(PotionEffectType.INVISIBILITY, 99999, 255, false, false))
                     players[it]?.player?.addPotionEffect(PotionEffect(PotionEffectType.NIGHT_VISION, 99999, 255, false, false))
                     for (onlinePlayer in server.onlinePlayers) {
+                        if (players[it]?.player == null) continue
+
                         onlinePlayer.hidePlayer(plugin, players[it]?.player!!)
                     }
                 }

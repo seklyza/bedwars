@@ -3,6 +3,7 @@ package com.seklyza.bedwars
 import com.seklyza.bedwars.commands.GameCommand
 import com.seklyza.bedwars.events.*
 import com.seklyza.bedwars.game.Game
+import com.seklyza.bedwars.listeners.VillagerNPCListener
 import net.minecraft.server.v1_15_R1.PacketPlayOutLogin
 import net.minecraft.server.v1_15_R1.WorldServer
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer
@@ -65,5 +66,6 @@ class Main : JavaPlugin() {
         EntityExplode()
         PlayerDropItem()
         InventoryClick()
+        VillagerNPCListener()
     }
 }

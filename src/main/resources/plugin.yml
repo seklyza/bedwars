@@ -2,6 +2,7 @@ name: Bedwars
 main: com.seklyza.bedwars.Main
 version: ${project.version}
 api-version: '1.15'
+depend: [ProtocolLib]
 commands:
     game:
         usage: '§cUsage: /<command> [start|stop] [time?]'
