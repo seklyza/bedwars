@@ -5,6 +5,6 @@ import org.bukkit.Location
 
 class ItemsShopVillagerNPC(location: Location) : VillagerNPC("§aItems Shop", location) {
     init {
-        ItemsShop.entityIds.add(entityID)
+        ItemsShop.entityIds.add(spawnEntity.entityID)
     }
 }
